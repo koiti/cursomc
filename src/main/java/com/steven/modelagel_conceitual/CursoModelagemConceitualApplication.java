@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.steven.modelagel_conceitual.domain.Categoria;
 import com.steven.modelagel_conceitual.domain.Cidade;
+import com.steven.modelagel_conceitual.domain.Cliente;
+import com.steven.modelagel_conceitual.domain.Endereco;
 import com.steven.modelagel_conceitual.domain.Estado;
 import com.steven.modelagel_conceitual.domain.Produto;
+import com.steven.modelagel_conceitual.domain.enums.TipoCliente;
 import com.steven.modelagel_conceitual.repositories.CategoriaRepository;
 import com.steven.modelagel_conceitual.repositories.CidadeRepository;
+import com.steven.modelagel_conceitual.repositories.ClienteRepository;
+import com.steven.modelagel_conceitual.repositories.EnderecoRepository;
 import com.steven.modelagel_conceitual.repositories.EstadoRepository;
 import com.steven.modelagel_conceitual.repositories.ProdutoRepository;
 
@@ -27,6 +32,10 @@ public class CursoModelagemConceitualApplication implements CommandLineRunner {
 	private EstadoRepository estadoRepository;
 	@Autowired
 	private CidadeRepository cidadeRepository;
+	@Autowired
+	private ClienteRepository clienteRepository;
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursoModelagemConceitualApplication.class, args);
@@ -61,9 +70,20 @@ public class CursoModelagemConceitualApplication implements CommandLineRunner {
 		
 		est1.getCidades().addAll(Arrays.asList(c1));
 		est2.getCidades().addAll(Arrays.asList(c2, c3));
-		
+
 		estadoRepository.save(Arrays.asList(est1, est2));
 		cidadeRepository.save(Arrays.asList(c1, c2, c3));
+
+		Cliente cli1 = new Cliente (null, "Maria Silva", "maria@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
+		cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
+
+		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardim", "38220834", cli1, c1);
+		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "38777012", cli1, c2);
+
+		cli1.getEnderecos().addAll(Arrays.asList(e1,e2));
 		
+		clienteRepository.save(Arrays.asList(cli1));
+		enderecoRepository.save(Arrays.asList(e1, e2));
+
 	}
 }
